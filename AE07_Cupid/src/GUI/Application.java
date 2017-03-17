@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.swing.JTabbedPane;
 import java.awt.GridLayout;
 import javax.swing.UIManager;
@@ -23,6 +26,11 @@ import java.awt.Font;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import javax.swing.ButtonGroup;
+import javax.swing.JTable;
 
 public class Application extends JFrame {
 
@@ -36,6 +44,9 @@ public class Application extends JFrame {
 	private JTextField txtCity;
 	private JTextField txtPhone;
 	private JTextField txtMail;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private ArrayList<Person> people;
+	private JTable tblOverview;
 
 	/**
 	 * Launch the application.
@@ -57,6 +68,8 @@ public class Application extends JFrame {
 	 * Create the frame.
 	 */
 	public Application() {
+		people = Logic.getPersonList();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
@@ -82,9 +95,9 @@ public class Application extends JFrame {
 		lblName.setBounds(265, 93, 286, 38);
 		tabDetail.add(lblName);
 		
-		JLabel lblAge = new JLabel("12");
+		JLabel lblAge = new JLabel("01.01.2005, 12");
 		lblAge.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-		lblAge.setBounds(265, 131, 34, 16);
+		lblAge.setBounds(265, 131, 117, 16);
 		tabDetail.add(lblAge);
 		
 		JTextArea txtrDetail = new JTextArea();
@@ -92,10 +105,10 @@ public class Application extends JFrame {
 		txtrDetail.setBounds(265, 256, 466, 77);
 		tabDetail.add(txtrDetail);
 		
-		JLabel lblCity = new JLabel("city");
-		lblCity.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		lblCity.setBounds(265, 159, 61, 16);
-		tabDetail.add(lblCity);
+		JLabel lblAddress = new JLabel("Street 12a, 22222 Hamburg");
+		lblAddress.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		lblAddress.setBounds(265, 159, 230, 16);
+		tabDetail.add(lblAddress);
 		
 		JLabel lblPhone = new JLabel("phone");
 		lblPhone.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -109,46 +122,84 @@ public class Application extends JFrame {
 		
 		JLabel lblGender = new JLabel("gender");
 		lblGender.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-		lblGender.setBounds(311, 132, 103, 15);
+		lblGender.setBounds(392, 132, 103, 15);
 		tabDetail.add(lblGender);
 		
-		JTextArea txtrNootes = new JTextArea();
-		txtrNootes.setText("Notes");
-		txtrNootes.setBounds(265, 364, 466, 77);
-		tabDetail.add(txtrNootes);
+		JTextArea txtrNotes = new JTextArea();
+		txtrNotes.setText("Notes");
+		txtrNotes.setBounds(265, 364, 466, 77);
+		tabDetail.add(txtrNotes);
+
+		JLabel lblId = new JLabel("");
+		lblId.setBounds(842, 107, 61, 16);
+		lblId.setVisible(false);
+		tabDetail.add(lblId);
 		
-		JButton btnSave = new JButton("save");
-		btnSave.setBounds(760, 412, 117, 29);
-		tabDetail.add(btnSave);
+		JButton btnSaveNotes = new JButton("save");
+		btnSaveNotes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logic.addNoteToPerson(lblId.getText(), txtrNotes.getText());
+			}
+		});
+		btnSaveNotes.setBounds(760, 412, 117, 29);
+		tabDetail.add(btnSaveNotes);
 		
 		JPanel tabOverview = new JPanel();
 		tabbedPane.addTab("overview", null, tabOverview, null);
 		tabOverview.setLayout(null);
 		
 		JRadioButton rdbtnDontCare = new JRadioButton("don't care");
+		rdbtnDontCare.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logic.getPeopleByGender("all");
+			}
+		});
+		buttonGroup.add(rdbtnDontCare);
 		rdbtnDontCare.setBounds(0, 26, 94, 23);
 		tabOverview.add(rdbtnDontCare);
 		
 		JRadioButton rdbtnWomen = new JRadioButton("women");
+		rdbtnWomen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logic.getPeopleByGender("women");
+			}
+		});
+		buttonGroup.add(rdbtnWomen);
 		rdbtnWomen.setBounds(100, 26, 77, 23);
 		tabOverview.add(rdbtnWomen);
 		
 		JRadioButton rdbtnMen = new JRadioButton("men");
+		rdbtnMen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logic.getPeopleByGender("men");
+			}
+		});
+		buttonGroup.add(rdbtnMen);
 		rdbtnMen.setBounds(189, 26, 59, 23);
 		tabOverview.add(rdbtnMen);
-		
-		JLabel lblSearch = new JLabel("search");
-		lblSearch.setBounds(292, 33, 41, 16);
-		tabOverview.add(lblSearch);
 		
 		txtSearchInput = new JTextField();
 		txtSearchInput.setBounds(347, 28, 389, 26);
 		tabOverview.add(txtSearchInput);
 		txtSearchInput.setColumns(8);
+		for(Person person : people){
+			
+		}
 		
-		JList liOverview = new JList();
-		liOverview.setBounds(0, 61, 993, 629);
-		tabOverview.add(liOverview);
+		JButton btnSearch = new JButton("search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logic.getPersonBySearch(txtSearchInput.getText());
+			}
+		});
+		btnSearch.setBounds(736, 25, 117, 29);
+		tabOverview.add(btnSearch);
+		
+		String[] columns = {"name", "lastname", "age", "gender", "city"}; //TODO Erstellung zweidimensionales Array um Daten der Personen drin zu speichern & Speichern der ID, damit sie bei dem Buttonclick übergeben werden kann. Außerdem muss der button noch erstellt werden und ein Eventhandler drauf, der dann auf den Tab Detail geht
+		String[][] data = new String[1][1]; //TODO fix
+		tblOverview = new JTable(data, columns);
+		tblOverview.setBounds(0, 61, 993, 629);
+		tabOverview.add(tblOverview);
 		
 		JPanel tabCreate = new JPanel();
 		tabbedPane.addTab("create", null, tabCreate, null);
@@ -188,16 +239,12 @@ public class Application extends JFrame {
 		label_4.setBounds(84, 364, 61, 16);
 		panel.add(label_4);
 		
-		JButton btnSaveNew = new JButton("save");
-		btnSaveNew.setBounds(807, 593, 117, 29);
-		panel.add(btnSaveNew);
-		
 		JLabel lblLastname = new JLabel("lastname");
 		lblLastname.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		lblLastname.setBounds(84, 187, 61, 16);
 		panel.add(lblLastname);
 		
-		JLabel lblAgeInput = new JLabel("age");
+		JLabel lblAgeInput = new JLabel("birthday");
 		lblAgeInput.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		lblAgeInput.setBounds(84, 215, 61, 16);
 		panel.add(lblAgeInput);
@@ -228,6 +275,11 @@ public class Application extends JFrame {
 		panel.add(lblInfo);
 		
 		JButton btnUploadImage = new JButton("upload image");
+		btnUploadImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//open dialog for choosing picture and save in variable
+			}
+		});
 		btnUploadImage.setBounds(807, 334, 117, 29);
 		panel.add(btnUploadImage);
 		
@@ -273,6 +325,18 @@ public class Application extends JFrame {
 		
 		JComboBox comboGender = new JComboBox();
 		comboGender.setBounds(157, 239, 130, 27);
+		comboGender.addItem("woman");
+		comboGender.addItem("man");
+		comboGender.addItem("other");
 		panel.add(comboGender);
+		
+		JButton btnCreateNew = new JButton("create");
+		btnCreateNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Logic.saveNewPerson(txtName.getText(), txtLastname.getText(), comboGender.getSelectedItem().toString(), txtAge.getText(), txtStreet.getText(), txtZip.getText(), txtCity.getText(), txtPhone.getText(), txtMail.getText(), "imagePath", txtrDetail.getText()); //imagePath is not yet implemented
+			}
+		});
+		btnCreateNew.setBounds(807, 593, 117, 29);
+		panel.add(btnCreateNew);
 	}
 }
