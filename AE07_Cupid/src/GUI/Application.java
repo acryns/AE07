@@ -68,8 +68,9 @@ public class Application extends JFrame {
 	 * Create the frame.
 	 */
 	public Application() {
-		people = Logic.getPersonList();
 		
+		Logic logic = new Logic(new PersonDAO());
+		people = logic.getPersonList();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
@@ -138,7 +139,12 @@ public class Application extends JFrame {
 		JButton btnSaveNotes = new JButton("save");
 		btnSaveNotes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Logic.addNoteToPerson(lblId.getText(), txtrNotes.getText());
+				try {
+					logic.addNoteToPerson(lblId.getText(), txtrNotes.getText());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnSaveNotes.setBounds(760, 412, 117, 29);
@@ -151,7 +157,7 @@ public class Application extends JFrame {
 		JRadioButton rdbtnDontCare = new JRadioButton("don't care");
 		rdbtnDontCare.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Logic.getPeopleByGender("all");
+				logic.getPeopleByGender("all");
 			}
 		});
 		buttonGroup.add(rdbtnDontCare);
@@ -161,7 +167,7 @@ public class Application extends JFrame {
 		JRadioButton rdbtnWomen = new JRadioButton("women");
 		rdbtnWomen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Logic.getPeopleByGender("women");
+				logic.getPeopleByGender("women");
 			}
 		});
 		buttonGroup.add(rdbtnWomen);
@@ -171,7 +177,7 @@ public class Application extends JFrame {
 		JRadioButton rdbtnMen = new JRadioButton("men");
 		rdbtnMen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Logic.getPeopleByGender("men");
+				logic.getPeopleByGender("men");
 			}
 		});
 		buttonGroup.add(rdbtnMen);
@@ -189,7 +195,7 @@ public class Application extends JFrame {
 		JButton btnSearch = new JButton("search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Logic.getPersonBySearch(txtSearchInput.getText());
+				logic.getPersonBySearch(txtSearchInput.getText());
 			}
 		});
 		btnSearch.setBounds(736, 25, 117, 29);
@@ -333,7 +339,7 @@ public class Application extends JFrame {
 		JButton btnCreateNew = new JButton("create");
 		btnCreateNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Logic.saveNewPerson(txtName.getText(), txtLastname.getText(), comboGender.getSelectedItem().toString(), txtAge.getText(), txtStreet.getText(), txtZip.getText(), txtCity.getText(), txtPhone.getText(), txtMail.getText(), "imagePath", txtrDetail.getText()); //imagePath is not yet implemented
+				logic.saveNewPerson(txtName.getText(), txtLastname.getText(), comboGender.getSelectedItem().toString(), txtAge.getText(), txtStreet.getText(), txtZip.getText(), txtCity.getText(), txtPhone.getText(), txtMail.getText(), "imagePath", txtrDetail.getText()); //imagePath is not yet implemented
 			}
 		});
 		btnCreateNew.setBounds(807, 593, 117, 29);

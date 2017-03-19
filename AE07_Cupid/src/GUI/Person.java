@@ -10,7 +10,10 @@ public class Person {
 	private String lastname;
 	private int age;
 	private String birthday;
-	private String address;
+	private String street;
+	private String city;
+	private int zip;
+	private String photo;
 	private String gender;
 	private String picture;
 	private String addInfo;
@@ -50,11 +53,11 @@ public class Person {
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
-	public String getAddress() {
-		return address;
+	public String getStreet() {
+		return street;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setStreet(String street) {
+		this.street = street;
 	}
 	public String getGender() {
 		return gender;
@@ -91,5 +94,23 @@ public class Person {
 	}
 	public void setMail(String mail) {
 		this.mail = mail;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public int getZip() {
+		return zip;
+	}
+	public void setZip(int zip) {
+		this.zip = zip;
+	}
+	public String getPhoto() {
+		return photo;
+	}
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}	
 }
