@@ -28,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.JTable;
@@ -58,7 +59,7 @@ public class Application extends JFrame {
 					Application frame = new Application();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					new ExceptionHandler(e).handle();
 				}
 			}
 		});
@@ -188,9 +189,9 @@ public class Application extends JFrame {
 		txtSearchInput.setBounds(347, 28, 389, 26);
 		tabOverview.add(txtSearchInput);
 		txtSearchInput.setColumns(8);
-		for(Person person : people){
-			
-		}
+//		for(Person person : people){
+//			
+//		}
 		
 		JButton btnSearch = new JButton("search");
 		btnSearch.addActionListener(new ActionListener() {
@@ -201,9 +202,7 @@ public class Application extends JFrame {
 		btnSearch.setBounds(736, 25, 117, 29);
 		tabOverview.add(btnSearch);
 		
-		String[] columns = {"name", "lastname", "age", "gender", "city"}; //TODO Erstellung zweidimensionales Array um Daten der Personen drin zu speichern & Speichern der ID, damit sie bei dem Buttonclick übergeben werden kann. Außerdem muss der button noch erstellt werden und ein Eventhandler drauf, der dann auf den Tab Detail geht
-		String[][] data = new String[1][1]; //TODO fix
-		tblOverview = new JTable(data, columns);
+		JTable tblOverview = generateOverviewTable(people);
 		tblOverview.setBounds(0, 61, 993, 629);
 		tabOverview.add(tblOverview);
 		
@@ -329,7 +328,7 @@ public class Application extends JFrame {
 		txtMail.setBounds(157, 359, 130, 26);
 		panel.add(txtMail);
 		
-		JComboBox comboGender = new JComboBox();
+		JComboBox<String> comboGender = new JComboBox<String>();
 		comboGender.setBounds(157, 239, 130, 27);
 		comboGender.addItem("woman");
 		comboGender.addItem("man");
@@ -344,5 +343,27 @@ public class Application extends JFrame {
 		});
 		btnCreateNew.setBounds(807, 593, 117, 29);
 		panel.add(btnCreateNew);
+	}
+	
+	public JTable generateOverviewTable(ArrayList<Person> people) {
+		Vector<Vector<Object>> tableContent = new Vector<Vector<Object>>();
+		Vector<String> tableheader = new Vector<String>();
+		tableheader.add("First Name");
+		tableheader.add("Last Name");
+		tableheader.add("Gender");
+		tableheader.add("Age");
+		tableheader.add("City");
+		//tableContent.add(tableheader);
+		for(Person peep : people) {
+			Vector<Object> row = new Vector<Object>();
+			row.add(peep.getName());
+			row.add(peep.getLastname());
+			row.add(peep.getGender());
+			row.add(Integer.toString(peep.getAge()));
+			row.add(peep.getCity());
+			tableContent.add(row);
+		}
+		JTable table = new JTable(tableContent, tableheader);
+		return table;
 	}
 }

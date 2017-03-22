@@ -1,0 +1,2 @@
+Datenbank wird wahrscheinlich bereits benutzt: null. Mögliche Lösungen: alle Verbindungen schliessen; Server Modus verwenden
+Database may be already in use: null. Possible solutions: close all other connection(s); use the server mode [90020-194]

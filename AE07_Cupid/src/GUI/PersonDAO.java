@@ -27,7 +27,7 @@ public class PersonDAO implements PersonDAOInterface {
 	@Override
 	public Person getById(int id) throws Exception {
 		try (Connection connection = ConnectionFactory.getH2Connection();
-				PreparedStatement statement = connection.prepareStatement("SELECT * FROM PEOPLE WHERE ID = ?")) {
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM PEOPLE WHERE PERSON_ID = ?")) {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
@@ -42,7 +42,7 @@ public class PersonDAO implements PersonDAOInterface {
 
 	@Override
 	public boolean add(Person person) throws Exception {
-		if (getById(person.getId()) == null) {
+		if (getById(person.getId()) != null) {
 			return false;
 		} else {
 			try (Connection connection = ConnectionFactory.getH2Connection();
@@ -75,7 +75,7 @@ public class PersonDAO implements PersonDAOInterface {
 	@Override
 	public boolean delete(Person person) throws Exception {
 		try (Connection connection = ConnectionFactory.getH2Connection();
-				PreparedStatement statement = connection.prepareStatement("DELETE FROM PEOPLE WHERE ID = ?")) {
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM PEOPLE WHERE PERSON_ID = ?")) {
 			statement.setInt(1, person.getId());
 			statement.executeQuery();
 			return true;
@@ -92,6 +92,10 @@ public class PersonDAO implements PersonDAOInterface {
 		person.setName(rs.getString("firstname"));
 		person.setLastname(rs.getString("lastname"));
 		person.setAge(rs.getInt("age"));
+		person.setStreet(rs.getString("street"));
+		person.setZip(rs.getInt("zip"));
+		person.setAddInfo(rs.getString("info"));
+		person.setNote(rs.getString("note"));
 		person.setGender(rs.getString("gender"));
 		person.setMail(rs.getString("mail"));
 
@@ -100,9 +104,9 @@ public class PersonDAO implements PersonDAOInterface {
 	
 	public ArrayList<Person> getListByName(String search) throws Exception {
 		try (Connection connection = ConnectionFactory.getH2Connection();
-				PreparedStatement statement = connection.prepareStatement("SELECT * FROM PEOPLE WHERE firstname LIKE '%?%' OR lastname LIKE '%?%'")) {
-			statement.setString(1, search);
-			statement.setString(2, search);
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM PEOPLE WHERE firstname LIKE ? OR lastname LIKE ?")) {
+			statement.setString(1,"%" + search + "%");
+			statement.setString(2,"%" + search + "%");
 			ResultSet resultSet = statement.executeQuery();
 			ArrayList<Person> pList = new ArrayList<Person>();
 			while(resultSet.next()) {
@@ -117,8 +121,8 @@ public class PersonDAO implements PersonDAOInterface {
 	
 	public ArrayList<Person> getListByGender(String search) throws Exception {
 		try (Connection connection = ConnectionFactory.getH2Connection();
-				PreparedStatement statement = connection.prepareStatement("SELECT * FROM PEOPLE WHERE gender LIKE '%?%'")) {
-			statement.setString(1, search);
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM PEOPLE WHERE gender LIKE ? ")) {
+			statement.setString(1, "%" + search + "%");
 			ResultSet resultSet = statement.executeQuery();
 			ArrayList<Person> pList = new ArrayList<Person>();
 			while(resultSet.next()) {
@@ -133,7 +137,7 @@ public class PersonDAO implements PersonDAOInterface {
 	
 	public boolean updateNote(Person p) throws Exception {
 		try (Connection connection = ConnectionFactory.getH2Connection();
-				PreparedStatement statement = connection.prepareStatement("UPDATE PEOPLE SET note = ? WHERE ID = ?")) {
+				PreparedStatement statement = connection.prepareStatement("UPDATE PEOPLE SET note = ? WHERE PERSON_ID = ?")) {
 			statement.setString(1, p.getNote());
 			statement.setInt(2, p.getId());
 			statement.executeQuery();

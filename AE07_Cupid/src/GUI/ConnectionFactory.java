@@ -14,7 +14,7 @@ public class ConnectionFactory {
     public static final String PASS = "";
 
     
-    public static Connection getH2Connection()
+    public static Connection getH2Connection() throws SQLException
     {
       try {
     	  JdbcDataSource ds = new JdbcDataSource();
@@ -24,7 +24,9 @@ public class ConnectionFactory {
     	  Connection conn = ds.getConnection();
     	  return conn;
       } catch (SQLException ex) {
-          throw new RuntimeException("Error connecting to the database", ex);
+    	  new ExceptionHandler(ex).handle();
+    	  return null;
+          //throw new RuntimeException("Error connecting to the database", ex);
       }
     }
     
@@ -33,9 +35,9 @@ public class ConnectionFactory {
         Statement stmt = connection.createStatement();
         try {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM people");
-            if(rs.next())
+            while(rs.next())
             {
-            	System.out.println(rs);
+            	System.out.println(rs.getInt("person_id"));
             }
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
