@@ -94,6 +94,7 @@ public class PersonDAO implements PersonDAOInterface {
 		person.setAge(rs.getInt("age"));
 		person.setStreet(rs.getString("street"));
 		person.setZip(rs.getInt("zip"));
+		person.setCity(rs.getString("city"));
 		person.setAddInfo(rs.getString("info"));
 		person.setNote(rs.getString("note"));
 		person.setGender(rs.getString("gender"));
@@ -122,7 +123,7 @@ public class PersonDAO implements PersonDAOInterface {
 	public ArrayList<Person> getListByGender(String search) throws Exception {
 		try (Connection connection = ConnectionFactory.getH2Connection();
 				PreparedStatement statement = connection.prepareStatement("SELECT * FROM PEOPLE WHERE gender LIKE ? ")) {
-			statement.setString(1, "%" + search + "%");
+			statement.setString(1, search + "%");
 			ResultSet resultSet = statement.executeQuery();
 			ArrayList<Person> pList = new ArrayList<Person>();
 			while(resultSet.next()) {
@@ -140,7 +141,7 @@ public class PersonDAO implements PersonDAOInterface {
 				PreparedStatement statement = connection.prepareStatement("UPDATE PEOPLE SET note = ? WHERE PERSON_ID = ?")) {
 			statement.setString(1, p.getNote());
 			statement.setInt(2, p.getId());
-			statement.executeQuery();
+			statement.execute();
 			return true;
 		} catch (SQLException ex) {
 			throw new Exception(ex.getMessage(), ex);

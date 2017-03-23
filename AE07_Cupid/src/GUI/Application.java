@@ -6,9 +6,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+
+
 import javax.swing.JTabbedPane;
 import java.awt.GridLayout;
 import javax.swing.UIManager;
@@ -16,8 +19,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+
 import java.awt.Insets;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
@@ -27,6 +33,9 @@ import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
@@ -47,7 +56,20 @@ public class Application extends JFrame {
 	private JTextField txtMail;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private ArrayList<Person> people;
-	private JTable tblOverview;
+	private JTable tblOverview = new JTable();
+	private JTabbedPane jTab;
+	
+	
+	private JLabel lblName = new JLabel("Vorname Nachname");
+	private JLabel lblAge = new JLabel("01.01.2005, 12");
+	private JTextArea txtrDetail = new JTextArea();
+	private JLabel lblAddress = new JLabel("Street 12a, 22222 Hamburg");
+	private JLabel lblPhone = new JLabel("phone");
+	private JLabel lblMail = new JLabel("mail");
+	private JLabel lblId = new JLabel("");
+	private JLabel lblGender = new JLabel("gender");
+	private JTextArea txtrNotes = new JTextArea();
+	
 
 	/**
 	 * Launch the application.
@@ -80,11 +102,11 @@ public class Application extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		contentPane.add(tabbedPane);
+		this.jTab = new JTabbedPane(JTabbedPane.TOP);
+		contentPane.add(jTab);
 		
 		JPanel tabDetail = new JPanel();
-		tabbedPane.addTab("details", null, tabDetail, null);
+		jTab.addTab("details", null, tabDetail, null);
 		tabDetail.setLayout(null);
 		
 		JPanel panelPicture = new JPanel();
@@ -92,47 +114,44 @@ public class Application extends JFrame {
 		panelPicture.setBounds(56, 101, 179, 232);
 		tabDetail.add(panelPicture);
 		
-		JLabel lblName = new JLabel("Vorname Nachname");
 		lblName.setFont(new Font("Lucida Grande", Font.BOLD, 20));
 		lblName.setBounds(265, 93, 286, 38);
 		tabDetail.add(lblName);
 		
-		JLabel lblAge = new JLabel("01.01.2005, 12");
 		lblAge.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		lblAge.setBounds(265, 131, 117, 16);
 		tabDetail.add(lblAge);
 		
-		JTextArea txtrDetail = new JTextArea();
 		txtrDetail.setText("Dummy text");
 		txtrDetail.setBounds(265, 256, 466, 77);
 		tabDetail.add(txtrDetail);
 		
-		JLabel lblAddress = new JLabel("Street 12a, 22222 Hamburg");
+		
 		lblAddress.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		lblAddress.setBounds(265, 159, 230, 16);
 		tabDetail.add(lblAddress);
 		
-		JLabel lblPhone = new JLabel("phone");
+		
 		lblPhone.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		lblPhone.setBounds(265, 187, 61, 16);
 		tabDetail.add(lblPhone);
 		
-		JLabel lblMail = new JLabel("mail");
+		
 		lblMail.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		lblMail.setBounds(265, 215, 61, 16);
 		tabDetail.add(lblMail);
 		
-		JLabel lblGender = new JLabel("gender");
+		
 		lblGender.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		lblGender.setBounds(392, 132, 103, 15);
 		tabDetail.add(lblGender);
 		
-		JTextArea txtrNotes = new JTextArea();
+		
 		txtrNotes.setText("Notes");
 		txtrNotes.setBounds(265, 364, 466, 77);
 		tabDetail.add(txtrNotes);
 
-		JLabel lblId = new JLabel("");
+		
 		lblId.setBounds(842, 107, 61, 16);
 		lblId.setVisible(false);
 		tabDetail.add(lblId);
@@ -152,13 +171,14 @@ public class Application extends JFrame {
 		tabDetail.add(btnSaveNotes);
 		
 		JPanel tabOverview = new JPanel();
-		tabbedPane.addTab("overview", null, tabOverview, null);
+		jTab.addTab("overview", null, tabOverview, null);
 		tabOverview.setLayout(null);
 		
 		JRadioButton rdbtnDontCare = new JRadioButton("don't care");
 		rdbtnDontCare.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				logic.getPeopleByGender("all");
+				people = logic.getPersonList();
+				tblOverview.setModel(generateOverviewTable(people));
 			}
 		});
 		buttonGroup.add(rdbtnDontCare);
@@ -168,7 +188,8 @@ public class Application extends JFrame {
 		JRadioButton rdbtnWomen = new JRadioButton("women");
 		rdbtnWomen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				logic.getPeopleByGender("women");
+				people = logic.getPeopleByGender("woman");
+				tblOverview.setModel(generateOverviewTable(people));
 			}
 		});
 		buttonGroup.add(rdbtnWomen);
@@ -178,7 +199,8 @@ public class Application extends JFrame {
 		JRadioButton rdbtnMen = new JRadioButton("men");
 		rdbtnMen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				logic.getPeopleByGender("men");
+				people = logic.getPeopleByGender("man");
+				tblOverview.setModel(generateOverviewTable(people));
 			}
 		});
 		buttonGroup.add(rdbtnMen);
@@ -192,22 +214,55 @@ public class Application extends JFrame {
 //		for(Person person : people){
 //			
 //		}
+		tblOverview.setModel(generateOverviewTable(people));
 		
 		JButton btnSearch = new JButton("search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				logic.getPersonBySearch(txtSearchInput.getText());
+				people = logic.getPersonBySearch(txtSearchInput.getText());
+				tblOverview.setModel(generateOverviewTable(people));
 			}
 		});
 		btnSearch.setBounds(736, 25, 117, 29);
 		tabOverview.add(btnSearch);
 		
-		JTable tblOverview = generateOverviewTable(people);
+		
+		
+		MouseListener[] listeners = tblOverview.getMouseListeners();
+		for (MouseListener l : listeners)
+		{
+		    tblOverview.removeMouseListener(l);
+		}
+		
+		tblOverview.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					getJTab().setSelectedIndex(0);
+			        int row = tblOverview.rowAtPoint( e.getPoint() );
+			        int p = (int)tblOverview.getValueAt(row,0);
+					Person peep = logic.getPersonById(p);
+					lblId.setText(Integer.toString(peep.getId()));
+					lblName.setText(peep.getName() + " " + peep.getLastname());
+					lblAge.setText(Integer.toString(peep.getAge()));
+					lblGender.setText(peep.getGender());
+					lblAddress.setText(peep.getStreet() + ", " + peep.getZip() + " " + peep.getCity());
+					lblMail.setText(peep.getMail());
+					txtrNotes.setText(peep.getNote());
+					txtrDetail.setText(peep.getAddInfo());
+				}
+			}
+		});
+
+		ListSelectionModel listMod =  tblOverview.getSelectionModel();
+		listMod.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listMod.addListSelectionListener(tblOverview);
+		
+		
 		tblOverview.setBounds(0, 61, 993, 629);
 		tabOverview.add(tblOverview);
 		
 		JPanel tabCreate = new JPanel();
-		tabbedPane.addTab("create", null, tabCreate, null);
+		jTab.addTab("create", null, tabCreate, null);
 		tabCreate.setLayout(new BoxLayout(tabCreate, BoxLayout.X_AXIS));
 		
 		JPanel panel = new JPanel();
@@ -249,7 +304,7 @@ public class Application extends JFrame {
 		lblLastname.setBounds(84, 187, 61, 16);
 		panel.add(lblLastname);
 		
-		JLabel lblAgeInput = new JLabel("birthday");
+		JLabel lblAgeInput = new JLabel("age");
 		lblAgeInput.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		lblAgeInput.setBounds(84, 215, 61, 16);
 		panel.add(lblAgeInput);
@@ -339,23 +394,33 @@ public class Application extends JFrame {
 		btnCreateNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				logic.saveNewPerson(txtName.getText(), txtLastname.getText(), comboGender.getSelectedItem().toString(), txtAge.getText(), txtStreet.getText(), txtZip.getText(), txtCity.getText(), txtPhone.getText(), txtMail.getText(), "imagePath", txtrDetail.getText()); //imagePath is not yet implemented
+				people = logic.getPersonList();
+				tblOverview.setModel(generateOverviewTable(people));
+				getJTab().setSelectedIndex(1);
 			}
 		});
 		btnCreateNew.setBounds(807, 593, 117, 29);
 		panel.add(btnCreateNew);
+		
 	}
 	
-	public JTable generateOverviewTable(ArrayList<Person> people) {
+	public  JTabbedPane getJTab() {
+		return jTab;
+	}
+	
+	public DefaultTableModel generateOverviewTable(ArrayList<Person> people) {
 		Vector<Vector<Object>> tableContent = new Vector<Vector<Object>>();
 		Vector<String> tableheader = new Vector<String>();
+		tableheader.add("#");
 		tableheader.add("First Name");
 		tableheader.add("Last Name");
 		tableheader.add("Gender");
 		tableheader.add("Age");
 		tableheader.add("City");
-		//tableContent.add(tableheader);
+		
 		for(Person peep : people) {
 			Vector<Object> row = new Vector<Object>();
+			row.addElement(peep.getId());
 			row.add(peep.getName());
 			row.add(peep.getLastname());
 			row.add(peep.getGender());
@@ -363,7 +428,7 @@ public class Application extends JFrame {
 			row.add(peep.getCity());
 			tableContent.add(row);
 		}
-		JTable table = new JTable(tableContent, tableheader);
-		return table;
+		DefaultTableModel model = new DefaultTableModel(tableContent, tableheader);
+		return model;
 	}
 }
