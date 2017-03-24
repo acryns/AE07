@@ -8,3 +8,4 @@ TODO
 MVC - refactor generated code slump
 DB Layer - add get & setWhere for dynamic filtering
 Exceptions - useful handling. 
+Input Validation, Frontend + Backend

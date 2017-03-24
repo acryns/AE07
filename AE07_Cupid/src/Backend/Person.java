@@ -1,4 +1,4 @@
-package GUI;
+package Backend;
 
 public class Person {
 

@@ -1,4 +1,4 @@
-package GUI;
+package Backend;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -20,6 +20,7 @@ public class ExceptionHandler extends Exception {
 		try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 	              new FileOutputStream("exception.txt"), "utf-8"))) {
 	   writer.write(this.ex.getMessage());
+	   ex.printStackTrace();
 	} catch (UnsupportedEncodingException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
