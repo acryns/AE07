@@ -5,5 +5,7 @@
 	<classpathentry kind="lib" path="AE07_Cupid/jgoodies-forms-1.8.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/jonasd-wpm/Downloads/h2-1.4.194.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jonasd-wpm/Pictures/ormlite-jdbc-5.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jonasd-wpm/Pictures/ormlite-core-5.0.jar"/>
 	<classpathentry kind="output" path="AE07_Cupid/bin"/>
 </classpath>

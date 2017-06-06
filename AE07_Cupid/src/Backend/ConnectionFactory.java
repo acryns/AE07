@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 
 import org.h2.jdbcx.JdbcDataSource;
+
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -28,6 +32,19 @@ public class ConnectionFactory {
     	  return null;
           //throw new RuntimeException("Error connecting to the database", ex);
       }
+    }
+    
+    public static ConnectionSource getH2ConnectionSource() {
+    	try {
+  	  		JdbcConnectionSource ds = new JdbcConnectionSource(URL);
+  	  		//ds.setUrl(URL);
+  	  		ds.setUsername(USER);
+  	  		ds.setPassword(PASS);
+  	  		return ds;
+    	} catch (Exception ex) {
+    		System.out.println("EXCEPTION");
+    		return null;
+    	}
     }
     
     public static void main(String[] args) throws SQLException {

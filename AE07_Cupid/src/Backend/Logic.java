@@ -38,14 +38,14 @@ public class Logic {
 		person.setName(name);
 		person.setLastname(lastname);
 		person.setGender(gender);
-		person.setBirthday(birthday);
+		//person.setBirthday(birthday);
 		person.setStreet(street);
 		person.setZip(Integer.parseInt(zip));
 		person.setCity(city);
-		person.setPhone(phone);
+//		person.setPhone(phone);
 		person.setMail(mail);
-		person.setPhoto(image);
-		person.setAddInfo(info);
+		//person.setPhoto(image);
+//		person.setAddInfo(info);
 		boolean bool = false;
 		try {
 			bool = this.dao.add(person);
@@ -58,7 +58,7 @@ public class Logic {
 	
 	public boolean addNoteToPerson(String id, String note) throws Exception{
 		Person p = new Person();
-		p.setId(Integer.parseInt(id));
+		p.setPerson_Id(Integer.parseInt(id));
 		p.setNote(note);
 		boolean bool = false;
 		try {

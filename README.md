@@ -5,7 +5,7 @@ Tabs die gespeicherten Daten dar: Als Liste, Einträge im Detail, Neuanlage.
 Das funktioniert alles nur so halbgut bisher und sieht fürchterlich aus.
 
 TODO
-MVC - refactor generated code slump
+MVC - refactor generated code slump - almost done! TODO refactor MVC into better MVC! less Constructor work
 DB Layer - add get & setWhere for dynamic filtering
 Exceptions - useful handling. 
 Input Validation, Frontend + Backend

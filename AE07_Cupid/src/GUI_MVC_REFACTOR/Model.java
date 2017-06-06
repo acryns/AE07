@@ -31,7 +31,7 @@ public class Model {
 		
 		for(Person peep : people) {
 			Vector<Object> row = new Vector<Object>();
-			row.addElement(peep.getId());
+			row.addElement(peep.getPerson_Id());
 			row.add(peep.getName());
 			row.add(peep.getLastname());
 			row.add(peep.getGender());

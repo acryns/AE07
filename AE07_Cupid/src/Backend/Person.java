@@ -1,39 +1,56 @@
 package Backend;
+import com.j256.ormlite.table.*;
+import com.j256.ormlite.field.*;
 
+@DatabaseTable(tableName = "people")
 public class Person {
 
 	public Person(){
 		
 	}
-	
-	private String name;
+	@DatabaseField
+	private String firstname;
+	@DatabaseField
 	private String lastname;
+	@DatabaseField
 	private int age;
-	private String birthday;
+	//@DatabaseField
+	//private String birthday;
+	@DatabaseField
 	private String street;
+	@DatabaseField
 	private String city;
+	@DatabaseField
 	private int zip;
-	private String photo;
+//	@DatabaseField
+//	private String photo;
+	@DatabaseField
 	private String gender;
-	private String picture;
-	private String addInfo;
+//	@DatabaseField
+//	private String picture;
+	@DatabaseField
+	private String info;
+	@DatabaseField
 	private String note;
-	private String phone;
+//	@DatabaseField
+//	private String phone;
+	@DatabaseField
 	private String mail;
-	private int id;
+	@DatabaseField(generatedId=true)
+	private int person_id;
 	
 	
-	public int getId() {
-		return id;
+	public int getPerson_Id() {
+		return person_id;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setPerson_Id(int id) {
+		this.person_id = id;
 	}
 	public String getName() {
-		return name;
+		return firstname;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.firstname = name;
 	}
 	public String getLastname() {
 		return lastname;
@@ -47,12 +64,12 @@ public class Person {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	public String getBirthday() {
-		return birthday;
-	}
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
-	}
+//	public String getBirthday() {
+//		return birthday;
+//	}
+//	public void setBirthday(String birthday) {
+//		this.birthday = birthday;
+//	}
 	public String getStreet() {
 		return street;
 	}
@@ -65,17 +82,17 @@ public class Person {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public String getPicture() {
-		return picture;
+//	public String getPicture() {
+//		return picture;
+//	}
+//	public void setPicture(String picture) {
+//		this.picture = picture;
+//	}
+	public String getInfo() {
+		return info;
 	}
-	public void setPicture(String picture) {
-		this.picture = picture;
-	}
-	public String getAddInfo() {
-		return addInfo;
-	}
-	public void setAddInfo(String addInfo) {
-		this.addInfo = addInfo;
+	public void setInfo(String addInfo) {
+		this.info = addInfo;
 	}
 	public String getNote() {
 		return note;
@@ -83,12 +100,12 @@ public class Person {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+//	public String getPhone() {
+//		return phone;
+//	}
+//	public void setPhone(String phone) {
+//		this.phone = phone;
+//	}
 	public String getMail() {
 		return mail;
 	}
@@ -107,11 +124,11 @@ public class Person {
 	public void setZip(int zip) {
 		this.zip = zip;
 	}
-	public String getPhoto() {
-		return photo;
-	}
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}	
+//	public String getPhoto() {
+//		return photo;
+//	}
+//	public void setPhoto(String photo) {
+//		this.photo = photo;
+//	}	
 
 }

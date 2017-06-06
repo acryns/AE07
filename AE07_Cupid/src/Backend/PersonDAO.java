@@ -42,7 +42,7 @@ public class PersonDAO implements PersonDAOInterface {
 
 	@Override
 	public boolean add(Person person) throws Exception {
-		if (getById(person.getId()) != null) {
+		if (getById(person.getPerson_Id()) != null) {
 			return false;
 		} else {
 			try (Connection connection = ConnectionFactory.getH2Connection();
@@ -54,9 +54,9 @@ public class PersonDAO implements PersonDAOInterface {
 				statement.setInt(5, person.getZip());
 				statement.setString(6, person.getCity());
 				statement.setString(7, person.getGender());
-				statement.setString(8, person.getAddInfo());
+//				statement.setString(8, person.getAddInfo());
 				statement.setString(9, person.getNote());
-				statement.setString(10, person.getPhoto());
+				//statement.setString(10, person.getPhoto());
 				statement.setString(11, person.getMail());
 				statement.execute();
 				return true;
@@ -76,7 +76,7 @@ public class PersonDAO implements PersonDAOInterface {
 	public boolean delete(Person person) throws Exception {
 		try (Connection connection = ConnectionFactory.getH2Connection();
 				PreparedStatement statement = connection.prepareStatement("DELETE FROM PEOPLE WHERE PERSON_ID = ?")) {
-			statement.setInt(1, person.getId());
+			statement.setInt(1, person.getPerson_Id());
 			statement.executeQuery();
 			return true;
 		} catch (SQLException ex) {
@@ -88,14 +88,14 @@ public class PersonDAO implements PersonDAOInterface {
 	private Person extractPersonFromResultSet(ResultSet rs) throws SQLException {
 		Person person = new Person();
 
-		person.setId(rs.getInt("person_id"));
+		person.setPerson_Id(rs.getInt("person_id"));
 		person.setName(rs.getString("firstname"));
 		person.setLastname(rs.getString("lastname"));
 		person.setAge(rs.getInt("age"));
 		person.setStreet(rs.getString("street"));
 		person.setZip(rs.getInt("zip"));
 		person.setCity(rs.getString("city"));
-		person.setAddInfo(rs.getString("info"));
+//		person.setAddInfo(rs.getString("info"));
 		person.setNote(rs.getString("note"));
 		person.setGender(rs.getString("gender"));
 		person.setMail(rs.getString("mail"));
@@ -140,7 +140,7 @@ public class PersonDAO implements PersonDAOInterface {
 		try (Connection connection = ConnectionFactory.getH2Connection();
 				PreparedStatement statement = connection.prepareStatement("UPDATE PEOPLE SET note = ? WHERE PERSON_ID = ?")) {
 			statement.setString(1, p.getNote());
-			statement.setInt(2, p.getId());
+			statement.setInt(2, p.getPerson_Id());
 			statement.execute();
 			return true;
 		} catch (SQLException ex) {
